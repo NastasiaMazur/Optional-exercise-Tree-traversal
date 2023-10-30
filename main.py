@@ -8,28 +8,29 @@ class TreeNode:
         self.left = None
         self.right = None
 
+    def traverse_in_order(self, visitor):
+        if self.left:
+            self.left.traverse_in_order(visitor)
+        visitor(self)
+        if self.right:
+            self.right.traverse_in_order(visitor)
+
+    def traverse_pre_order(self, visitor):
+        visitor(self)
+        if self.left:
+            self.left.traverse_pre_order(visitor)
+        if self.right:
+            self.right.traverse_pre_order(visitor)
+
+    def traverse_post_order(self, visitor):
+        if self.left:
+            self.left.traverse_post_order(visitor)
+        if self.right:
+            self.right.traverse_post_order(visitor)
+        visitor(self)
+
 def visit(node):
     print(f"Visiting {node.value}")
-
-def traverse_recursively_in_order(node):
-    if node is not None:
-        traverse_recursively_in_order(node.left)
-        visit(node)
-        traverse_recursively_in_order(node.right)
-
-
-def traverse_in_order_imperatively(node):
-    stack = []
-    current = node
-
-    while stack or current:
-        if current:
-            stack.append(current)
-            current = current.left
-        else:
-            current = stack.pop()
-            visit(current)
-            current = current.right
 
 #My tree:
 root = TreeNode("+")
@@ -44,7 +45,13 @@ root.right.left = TreeNode("D")
 root.right.right = TreeNode("E")
 
 print("Recursive In-Order Traversal:")
-traverse_recursively_in_order(root)
+root.traverse_in_order(visit)
 
-print("\nImperative In-Order Traversal:")
-traverse_in_order_imperatively(root)
+
+print("\nRecursive Pre-Order Traversal:")
+root.traverse_pre_order(visit)
+
+print("\nRecursive Post-Order Traversal:")
+root.traverse_post_order(visit)
+
+# Part 2 (Recursive only)
